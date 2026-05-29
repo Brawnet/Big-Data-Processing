@@ -1,0 +1,54 @@
+Sector,Industry,Avg_Close_Price,Total_Volume
+Technology,Software - Application,325.18430060222016,30397222500
+Technology,Software - Infrastructure,213.54720021971661,60436475500
+Technology,Consumer Electronics,166.6239523474479,128850014900
+Technology,Information Technology Services,151.1637754160729,7632924988
+Technology,Semiconductor Equipment & Materials,136.80874021449384,11310307100
+Technology,Semiconductors,101.53550529210756,856092195900
+Technology,Communication Equipment,48.546368651747315,31863394200
+Industrials,Farm & Heavy Construction Machinery,306.06756472509926,7284362600
+Industrials,Aerospace & Defense,240.50470233776412,49992702396
+Industrials,Integrated Freight & Logistics,177.5694164860132,10119703900
+Industrials,Specialty Industrial Machinery,168.89796065041608,9730955800
+Industrials,Waste Management,161.56892598304375,2685784900
+Industrials,Railroads,153.1607283570479,27498113500
+Industrials,Conglomerates,145.6282273332925,11699240183
+Industrials,Building Products & Equipment,48.50768726750424,7910349900
+Healthcare,Biotechnology,507.80332921925896,3655506300
+Healthcare,Diagnostics & Research,363.1802191992148,7471525284
+Healthcare,Medical Instruments & Supplies,338.75232991768405,2856788600
+Healthcare,Healthcare Plans,282.2283308150656,25269611600
+Healthcare,Drug Manufacturers - General,163.05072268014777,137496933519
+Healthcare,Drug Manufacturers - Specialty & Generic,162.0015244772846,3609153200
+Healthcare,Medical Devices,106.40678497712076,9092387500
+Financial Services,Asset Management,739.1213181287536,1088424600
+Financial Services,Financial Data & Stock Exchanges,294.85952676282255,5016636200
+Financial Services,Credit Services,240.2522580764604,27139650400
+Financial Services,Insurance - Property & Casualty,205.3186567822186,2835974700
+Financial Services,Insurance - Diversified,199.21793972475132,14351019000
+Financial Services,Capital Markets,180.05147914368737,32649632000
+Financial Services,Banks - Diversified,75.3593345477449,159268559100
+Financial Services,Banks - Regional,74.78058060887169,29286579600
+Energy,Oil & Gas Integrated,101.7254124277966,47799120700
+Energy,Oil & Gas Refining & Marketing,100.11895036790581,18397252800
+Energy,Oil & Gas E&P,71.4294413855343,44752229400
+Energy,Oil & Gas Equipment & Services,30.7989129641157,38349976300
+Consumer Defensive,Discount Stores,261.55268717837254,45036776600
+Consumer Defensive,Household & Personal Products,131.27124720106426,22336317800
+Consumer Defensive,Beverages - Non-Alcoholic,99.47551940147574,32684320000
+Consumer Defensive,Tobacco,94.66230471980688,7973994600
+Consumer Cyclical,Home Improvement Retail,249.46670248423027,11329490400
+Consumer Cyclical,Auto Manufacturers,240.8983682688362,183983350700
+Consumer Cyclical,Restaurants,165.96771692406472,18252007400
+Consumer Cyclical,Internet Retail,159.89466065148966,98679058500
+Consumer Cyclical,Footwear & Accessories,100.83531947431037,14843063500
+Consumer Cyclical,Apparel Retail,84.17311337001937,9336865700
+Communication Services,Internet Content & Information,251.6739010702127,85154467600
+Communication Services,Entertainment,87.83531209467289,109414270400
+Communication Services,Telecom Services,30.38055228855371,137153105968
+Basic Materials,Specialty Chemicals,219.14550441679816,22856461584
+Basic Materials,Building Materials,198.5942627350748,1372181300
+Basic Materials,Steel,116.64014922027091,3452581400
+Basic Materials,Gold,51.11203302762407,13907060000
+Basic Materials,Chemicals,40.871006973713925,9710956800
+Basic Materials,Copper,34.51125201806183,26683258500
