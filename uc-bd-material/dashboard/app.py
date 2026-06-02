@@ -141,17 +141,22 @@ if not raw_df.empty:
 st.divider()
 
 # ==========================================
-# 2. CANDLESTICK CHART 
+# 2. VISUALISASI PERGERAKAN HARGA
 # ==========================================
-st.subheader("🕯️ Analisis Pergerakan Harga (Candlestick - Real-Time)")
+st.subheader("📈 Analisis Pergerakan Harga (Real-Time)")
 
 if not raw_df.empty:
     daftar_ticker = raw_df['Ticker'].unique()
     default_idx = int(list(daftar_ticker).index('AAPL')) if 'AAPL' in daftar_ticker else 0
-    pilihan_ticker = st.selectbox("Pilih Saham (Grafik akan memanjang saat data baru masuk):", daftar_ticker, index=default_idx)
+    
+    # Membuat 2 kolom agar UI lebih rapi (Kiri: Saham, Kanan: Jenis Grafik)
+    col1, col2 = st.columns(2)
+    with col1:
+        pilihan_ticker = st.selectbox("Pilih Saham (Grafik memanjang saat data baru masuk):", daftar_ticker, index=default_idx)
+    with col2:
+        jenis_grafik = st.radio("Pilih Jenis Visualisasi:", ["Candlestick", "Line Chart (Harga Close)"], horizontal=True)
     
     # --- 1. PROSES BATCH DATA (Khusus sebelum 2024) ---
-    # Pastikan tipe Date konsisten
     raw_df['Date'] = pd.to_datetime(raw_df['Date'])
     raw_df['Year'] = raw_df['Date'].dt.year
     batch_data = raw_df[(raw_df['Ticker'] == pilihan_ticker) & (raw_df['Year'] < 2024)].copy()
@@ -178,23 +183,39 @@ if not raw_df.empty:
     # Urutkan dan hapus duplikat
     data_pilihan = data_pilihan.sort_values(by='Date').drop_duplicates(subset=['Date'], keep='last')
     
-    # Buat Visualisasi Candlestick
-    fig_candle = go.Figure(data=[go.Candlestick(
-        x=data_pilihan['Date'],
-        open=data_pilihan['Open'],
-        high=data_pilihan['High'],
-        low=data_pilihan['Low'],
-        close=data_pilihan['Close'],
-        name=pilihan_ticker
-    )])
-    
-    fig_candle.update_layout(
-        title=f"Candlestick Chart - {pilihan_ticker} (Termasuk Live Data Spark)", 
+    # --- 4. PEMBUATAN GRAFIK (DINAMIS) ---
+    fig = go.Figure()
+
+    if jenis_grafik == "Candlestick":
+        fig.add_trace(go.Candlestick(
+            x=data_pilihan['Date'],
+            open=data_pilihan['Open'],
+            high=data_pilihan['High'],
+            low=data_pilihan['Low'],
+            close=data_pilihan['Close'],
+            name=pilihan_ticker
+        ))
+        slider_visible = True
+    else:
+        # Menambahkan Line Chart menggunakan Harga Close
+        fig.add_trace(go.Scatter(
+            x=data_pilihan['Date'],
+            y=data_pilihan['Close'],
+            mode='lines',
+            name=f"{pilihan_ticker} Close Price",
+            line=dict(color='#00b4d8', width=2)
+        ))
+        slider_visible = False # Mematikan slider bawaan Candlestick untuk tampilan Line yang lebih bersih
+        
+    fig.update_layout(
+        title=f"Pergerakan Harga - {pilihan_ticker} (Termasuk Live Data Spark)", 
         yaxis_title="Harga (USD)", 
         xaxis_title="Tanggal",
-        xaxis_rangeslider_visible=True # Menambahkan slider zoom di bawah grafik
+        xaxis_rangeslider_visible=slider_visible,
+        height=500,
+        margin=dict(l=0, r=0, t=40, b=0)
     )
-    st.plotly_chart(fig_candle, use_container_width=True)
+    st.plotly_chart(fig, use_container_width=True)
 
 st.divider()
 # ==========================================
