@@ -8,6 +8,11 @@ import glob
 st.set_page_config(layout="wide", page_title="Stock Market Dashboard")
 st.title("📈 Advanced Stock Market Dashboard")
 
+# Tambahkan ini di menu samping (sidebar)
+st.sidebar.divider()
+st.sidebar.subheader("⚙️ Pengaturan Real-Time")
+auto_refresh = st.sidebar.toggle("🔄 Nyalakan Auto-Refresh (3 detik)")
+
 # --- Fungsi Format Volume (Billion/Million) ---
 def format_volume(val):
     if val >= 1_000_000_000:
@@ -36,26 +41,37 @@ def load_raw_data():
 batch_df = load_batch_data()
 raw_df = load_raw_data()
 
-@st.cache_data(ttl=1) # Cache kedaluwarsa tiap 1 detik agar chart terus ter-update
+# --- FUNGSI LOAD DATA STREAMING (Real-Time) ---
+@st.cache_data(ttl=1) 
 def load_streaming_data():
-    path = '../data/stream_output/*.json'
+    base_dir = os.path.dirname(os.path.abspath(__file__))
+    path = os.path.join(base_dir, '../data/stream_output/*.json') 
+    
     files = glob.glob(path)
     if not files:
         return pd.DataFrame()
     
-    # Baca semua file JSON hasil buatan Spark
     dfs = []
     for f in files:
         try:
+            # Baca file JSON baris per baris
             df = pd.read_json(f, lines=True)
-            dfs.append(df)
+            
+            # VALIDASI: Hanya ambil dataframe yang TIDAK KOSONG dan punya kolom 'Date'
+            if not df.empty and 'Date' in df.columns:
+                dfs.append(df)
         except:
             pass
             
+    # Jika setelah disaring ternyata ada datanya, baru digabung
     if dfs:
         stream_df = pd.concat(dfs, ignore_index=True)
-        stream_df['Date'] = pd.to_datetime(stream_df['Date'], utc=True).dt.date
+        # Ubah format Date agar seragam dengan data Batch
+        if 'Date' in stream_df.columns:
+            stream_df['Date'] = pd.to_datetime(stream_df['Date'], utc=True).dt.date
         return stream_df
+        
+    # Jika semua file JSON ternyata kosong, kembalikan dataframe kosong
     return pd.DataFrame()
 
 # ==========================================
@@ -182,34 +198,69 @@ if not raw_df.empty:
 
 st.divider()
 # ==========================================
-# 3. BATCH VISUALIZATION (BARPLOT HARIAN)
+# 3. BATCH VISUALIZATION (BARPLOT SEKTOR - RENTANG TANGGAL)
 # ==========================================
-st.subheader("📊 Analisis Batch: Tren Sektor & Volume Harian")
+st.subheader("📊 Analisis Batch: Tren Sektor & Volume")
 
 if not batch_df.empty:
-    # Filter tanggal untuk visualisasi agar tidak terlalu padat
-    tgl_awal, tgl_akhir = st.select_slider(
-        "Pilih Rentang Waktu (Batch):",
-        options=batch_df['Date_Only'].unique(),
-        value=(batch_df['Date_Only'].min(), batch_df['Date_Only'].max())
+    # 1. Pastikan kolom tanggal berformat date
+    batch_df['Date_Only'] = pd.to_datetime(batch_df['Date_Only']).dt.date
+    min_date = batch_df['Date_Only'].min()
+    max_date = batch_df['Date_Only'].max()
+    
+    # 2. Kalender
+    rentang_tanggal = st.date_input(
+        "📅 Pilih Rentang Tanggal (Klik 2x: Mulai & Selesai):",
+        value=(min_date, max_date),
+        min_value=min_date,
+        max_value=max_date,
+        key="batch_date_picker"
     )
     
-    batch_filter = batch_df[(batch_df['Date_Only'] >= tgl_awal) & (batch_df['Date_Only'] <= tgl_akhir)]
-    
-    col1, col2 = st.columns(2)
-    with col1:
-        # Barplot: Rata-rata Harga Sektor Harian
-        fig_bar_price = px.bar(batch_filter, x="Date_Only", y="Avg_Close_Price", color="Sector",
-                               title="Rata-rata Harga Saham per Sektor (Harian)", barmode="group")
-        st.plotly_chart(fig_bar_price, use_container_width=True)
+    # 3. Cek apakah user sudah mengklik tanggal awal DAN akhir
+    if len(rentang_tanggal) == 2:
+        tgl_awal, tgl_akhir = rentang_tanggal
+        batch_filter = batch_df[(batch_df['Date_Only'] >= tgl_awal) & (batch_df['Date_Only'] <= tgl_akhir)]
         
-    with col2:
-        # Barplot: Distribusi Volume Harian
-        fig_bar_vol = px.bar(batch_filter, x="Date_Only", y="Total_Volume", color="Sector",
-                             title="Distribusi Volume Perdagangan Harian",
-                             labels={"Total_Volume": "Total Volume"})
-        # Format sumbu Y di plotly menjadi M/B
-        fig_bar_vol.update_layout(yaxis=dict(tickformat=".2s"))
-        st.plotly_chart(fig_bar_vol, use_container_width=True)
+        if not batch_filter.empty:
+            batch_agg = batch_filter.groupby("Sector").agg(
+                Avg_Close_Price=("Avg_Close_Price", "mean"), 
+                Total_Volume=("Total_Volume", "sum")         
+            ).reset_index()
+            
+            # --- CARA TERAMAN: Bagi langsung data volume dengan 1 Miliar ---
+            # Kita buat kolom baru bernama Total_Volume_Billion
+            batch_agg['Total_Volume_Billion'] = batch_agg['Total_Volume'] / 1_000_000_000
+            
+            col1, col2 = st.columns(2)
+            with col1:
+                fig_bar_price = px.bar(batch_agg, x="Sector", y="Avg_Close_Price", color="Sector",
+                                       title=f"Rata-rata Harga Saham per Sektor<br>({tgl_awal} s/d {tgl_akhir})",
+                                       labels={"Avg_Close_Price": "Harga Rata-rata (USD)", "Sector": "Sektor"})
+                fig_bar_price.update_layout(showlegend=False)
+                st.plotly_chart(fig_bar_price, use_container_width=True)
+                
+            with col2:
+                # Gunakan kolom volume yang sudah dibagi 1 Miliar
+                fig_bar_vol = px.bar(batch_agg, x="Sector", y="Total_Volume_Billion", color="Sector",
+                                     title=f"Total Volume Perdagangan per Sektor<br>({tgl_awal} s/d {tgl_akhir})",
+                                     labels={"Total_Volume_Billion": "Total Volume (Billion/Miliar)", "Sector": "Sektor"})
+                
+                # Format angka biasa (2 angka di belakang koma), tanpa singkatan SI "G"
+                fig_bar_vol.update_layout(yaxis=dict(tickformat=".2f"), showlegend=False)
+                st.plotly_chart(fig_bar_vol, use_container_width=True)
+        else:
+            st.warning("Tidak ada data pada rentang tanggal tersebut.")
+    else:
+        # Jika grafik menghilang, pesan ini akan muncul untuk mengingatkan user
+        st.info("⚠️ Silakan klik tanggal AKHIR di kalender untuk memunculkan grafik.")
 else:
     st.warning("Data Batch belum tersedia.")
+
+# ==========================================
+# MESIN PENGGERAK AUTO-REFRESH
+# ==========================================
+if auto_refresh:
+    import time
+    time.sleep(3) # Jeda waktu sebelum layar berkedip (3 detik)
+    st.rerun()    # Perintah sakti untuk me-refresh Streamlit otomatis
