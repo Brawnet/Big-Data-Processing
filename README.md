@@ -178,7 +178,6 @@ python producer/producer.py
 
 tulisan data terkirim
 
-```
 
 ### Langkah 6 — Jalankan Dashboard Streamlit
 
