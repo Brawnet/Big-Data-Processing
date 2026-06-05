@@ -179,12 +179,6 @@ Output akan disimpan di: `data/batch_results/hasil_batch_saham.csv`
 
 > **Catatan:** Jika HDFS tersedia, data juga akan disimpan ke `hdfs://localhost:9000/user/data/batch_saham`. Jika tidak, otomatis fallback ke penyimpanan lokal.
 
-### Langkah 5 — Jalankan Streaming Job (PySpark)
-
-Job ini membaca data real-time dari Kafka topic `stock_market` menggunakan PySpark Structured Streaming dan menyimpan hasilnya ke folder `data/stream_output/` dalam format JSON.
-
-```bash
-spark-submit --packages org.apache.spark:spark-sql-kafka-0-10_2.12:3.3.0 jobs/streaming_job.py
 ```
 
 ### Langkah 6 — Jalankan Dashboard Streamlit
