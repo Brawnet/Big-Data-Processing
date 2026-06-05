@@ -164,9 +164,8 @@ Job ini memproses seluruh dataset secara batch, menghitung rata-rata harga penut
 ```bash
 cd uc-bd-material/jobs
 python streaming_job.py
-<img width="1337" height="120" alt="image" src="https://github.com/user-attachments/assets/708d0cae-adee-4cac-9fcf-d7e9a0af9c6f" />
-
 ```
+<img width="1337" height="120" alt="image" src="https://github.com/user-attachments/assets/708d0cae-adee-4cac-9fcf-d7e9a0af9c6f" />
 
 ### Langkah 4 — Jalankan Kafka Producer
 
