@@ -157,7 +157,7 @@ Perintah ini akan menjalankan:
 ```bash
 pip install -r requirements.txt
 ```
-### Langkah 3 — Jalankan Batch Analysis dan folder kosong untuk data streaming (PySpark)
+### Langkah 3 — buat folder kosong untuk data streaming (PySpark)
 
 Job ini memproses seluruh dataset secara batch, menghitung rata-rata harga penutupan dan total volume per sektor per hari, lalu menyimpan hasilnya ke file CSV.
 
