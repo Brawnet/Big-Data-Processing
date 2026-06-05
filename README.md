@@ -155,29 +155,29 @@ Perintah ini akan menjalankan:
 ### Langkah 2 — Install Dependensi Producer
 
 ```bash
-cd uc-bd-material/producer
 pip install -r requirements.txt
 ```
+### Langkah 3 — Jalankan Batch Analysis dan folder kosong untuk data streaming (PySpark)
 
-### Langkah 3 — Jalankan Kafka Producer
+Job ini memproses seluruh dataset secara batch, menghitung rata-rata harga penutupan dan total volume per sektor per hari, lalu menyimpan hasilnya ke file CSV.
+
+```bash
+cd uc-bd-material/jobs
+python streaming_job.py
+<img width="1337" height="120" alt="image" src="https://github.com/user-attachments/assets/708d0cae-adee-4cac-9fcf-d7e9a0af9c6f" />
+
+```
+
+### Langkah 4 — Jalankan Kafka Producer
 
 Producer akan membaca dataset CSV dan mengirimkan data saham tahun **2024–2026** ke Kafka secara kontinu (100 data/detik, loop otomatis).
 
 ```bash
 python producer/producer.py
 ```
+<img width="570" height="226" alt="image" src="https://github.com/user-attachments/assets/798fff3b-22b9-4619-a88e-b90905dd583b" />
 
-### Langkah 4 — Jalankan Batch Analysis (PySpark)
-
-Job ini memproses seluruh dataset secara batch, menghitung rata-rata harga penutupan dan total volume per sektor per hari, lalu menyimpan hasilnya ke file CSV.
-
-```bash
-spark-submit jobs/batch_analysis.py
-```
-
-Output akan disimpan di: `data/batch_results/hasil_batch_saham.csv`
-
-> **Catatan:** Jika HDFS tersedia, data juga akan disimpan ke `hdfs://localhost:9000/user/data/batch_saham`. Jika tidak, otomatis fallback ke penyimpanan lokal.
+tulisan data terkirim
 
 ```
 
@@ -185,21 +185,12 @@ Output akan disimpan di: `data/batch_results/hasil_batch_saham.csv`
 
 ```bash
 cd uc-bd-material/dashboard
-pip install -r requirements.txt
 streamlit run app.py
 ```
 
+seharusnya bisa langsung ke direct ke website
 Dashboard dapat diakses di: **http://localhost:8501**
 
----
-
-## 🐳 Menjalankan Dashboard via Docker
-
-```bash
-cd uc-bd-material/dashboard
-docker build -t stock-dashboard .
-docker run -p 8501:8501 stock-dashboard
-```
 
 ---
 
