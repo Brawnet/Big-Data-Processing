@@ -45,6 +45,7 @@ Big-Data-Processing-main/
     │   ├── stock_prices_daily.csv          # Dataset utama harga saham harian
     │   └── batch_results/
     │       └── hasil_batch_saham.csv       # Output hasil batch analysis (PySpark)
+    |       └── hasil_stream_analisis       # output kalau mengeluarkan 
     ├── jobs/
     │   ├── batch_analysis.py       # PySpark job untuk batch processing
     │   └── streaming_job.py        # PySpark Structured Streaming dari Kafka
