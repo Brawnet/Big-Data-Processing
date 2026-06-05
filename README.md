@@ -139,7 +139,7 @@ Dataset berisi harga saham harian dari berbagai perusahaan yang terdaftar di bur
 - **Java 8/11** — diperlukan oleh Apache Spark
 - **Apache Spark** dengan PySpark
 
-### Langkah 1 — Jalankan Kafka dan Zookeeper
+### Langkah 1 — Jalankan Kafka dan Zookeeper Terminal 1
 
 ```bash
 cd uc-bd-material
@@ -154,12 +154,16 @@ Perintah ini akan menjalankan:
 <img width="1193" height="130" alt="image" src="https://github.com/user-attachments/assets/1186e90d-9da4-4399-9140-9d16ac105d47" />
 
 
-### Langkah 2 — Install Dependensi Producer
+### Langkah 2 — Install Dependensi Producer dan dashboard
 
 ```bash
+cd dashboard
+pip install -r requirements.txt
+cd ..
+cd producer
 pip install -r requirements.txt
 ```
-### Langkah 3 — buat folder kosong untuk data streaming (PySpark)
+### Langkah 3 — buat folder kosong untuk data streaming (PySpark) 
 
 Job ini memproses seluruh dataset secara batch, menghitung rata-rata harga penutupan dan total volume per sektor per hari, lalu menyimpan hasilnya ke file CSV.
 
@@ -169,11 +173,12 @@ python streaming_job.py
 ```
 <img width="1337" height="120" alt="image" src="https://github.com/user-attachments/assets/708d0cae-adee-4cac-9fcf-d7e9a0af9c6f" />
 
-### Langkah 4 — Jalankan Kafka Producer
+### Langkah 4 — Jalankan Kafka Producer (Terminal 2)
 
 Producer akan membaca dataset CSV dan mengirimkan data saham tahun **2024–2026** ke Kafka secara kontinu (100 data/detik, loop otomatis).
 
 ```bash
+buka terminal baru
 python producer/producer.py
 ```
 <img width="570" height="226" alt="image" src="https://github.com/user-attachments/assets/798fff3b-22b9-4619-a88e-b90905dd583b" />
@@ -181,9 +186,10 @@ python producer/producer.py
 tulisan data terkirim
 
 
-### Langkah 6 — Jalankan Dashboard Streamlit
+### Langkah 6 — Jalankan Dashboard Streamlit (Terminal 3)
 
 ```bash
+buka terminal baru
 cd uc-bd-material/dashboard
 streamlit run app.py
 ```
