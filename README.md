@@ -148,6 +148,10 @@ Perintah ini akan menjalankan:
 - **Zookeeper** di port `22181`
 - **Kafka Broker** di port `9092`
 
+### expected output
+<img width="1193" height="130" alt="image" src="https://github.com/user-attachments/assets/1186e90d-9da4-4399-9140-9d16ac105d47" />
+
+
 ### Langkah 2 — Install Dependensi Producer
 
 ```bash
