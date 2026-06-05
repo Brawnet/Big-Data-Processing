@@ -10,6 +10,8 @@
 | Muh. Nur Alif Akbar | 0706022310031 |
 | Yehezkiel Chandra | 0706022310038 |
 
+
+## our project in yt https://youtu.be/qx72UBF5SpQ (play it 2x)
 ---
 
 Proyek ini merupakan implementasi **pipeline Big Data end-to-end** untuk memproses data harga saham harian menggunakan teknologi modern: **Apache Kafka**, **Apache Spark**, dan **Streamlit Dashboard**. Pipeline mencakup dua jalur pemrosesan utama — *batch processing* menggunakan PySpark dan *stream processing* berbasis Kafka secara real-time.
