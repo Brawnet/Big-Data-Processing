@@ -1,6 +1,6 @@
 # 📈 Big Data Processing — Stock Market Pipeline
 
-## 👥 Authors
+## Group A02 Members:
 
 | Nama | NIM |
 |---|---|
@@ -234,6 +234,6 @@ Dashboard Streamlit (`app.py`) menyediakan visualisasi interaktif sebagai beriku
 
 ---
 
-## 📄 Lisensi
+## Lisensi
 
 Proyek ini dibuat untuk keperluan pembelajaran dan demonstrasi pipeline Big Data.
