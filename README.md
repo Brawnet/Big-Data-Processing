@@ -31,7 +31,7 @@ Sistem yang dibangun adalah sebuah **Pipeline Data End-to-End hibrida (Lambda Ar
 
 Secara end-to-end, sistem ini bekerja melalui mekanisme interaksi komponen berikut:
 
-### **1. Simulasi & Ingesti Data (Producer):**
+##### **1. Simulasi & Ingesti Data (Producer):**
 
 Skrip Kafka Producer (`producer.py`) membaca dataset mentah secara sekuensial dan menyimulasikan aktivitas pasar saham live. Data saham untuk rentang tahun 2024–2026 dikirimkan secara kontinu dengan kecepatan tinggi (100 data/detik) ke dalam Kafka Topic bernama `stock_market`.
 Jalur Pemrosesan Batch (Batch Processing Pipeline):
