@@ -11,7 +11,7 @@
 | Yehezkiel Chandra | 0706022310038 |
 
 
-## Project Demonstration https://youtu.be/qx72UBF5SpQ (play it 2x)
+## Project Demonstration https://youtu.be/qx72UBF5SpQ (play it 2x speed)
 ---
 
 ## Project Description
