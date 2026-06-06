@@ -279,12 +279,12 @@ Dashboard Streamlit (`app.py`) menyediakan visualisasi interaktif sebagai beriku
 
 ## Findings & Conclusion
 
-##### Batch Analysis Findings
+### Batch Analysis Findings
 Berdasarkan agregasi data historis (2020–2023) menggunakan PySpark Batch Job, ditemukan beberapa tren makro struktural pada pasar saham AS:
 * **Dominasi Sektor Teknologi:** Sektor *Technology* secara konsisten mencatatkan rata-rata harga penutupan (`Avg_Close_Price`) tertinggi dibandingkan sektor lainnya. Hal ini didorong oleh pertumbuhan masif emiten besar seperti Apple (AAPL) dan Microsoft (MSFT) pasca-pandemi.
 * **Volume Transaksi Industri Keuangan & Energi:** Meskipun sektor teknologi memimpin dari segi harga saham, volume perdagangan terbesar (`Total_Volume`) sering kali didominasi oleh sektor *Finance* (Keuangan) dan *Energy* (Energi). Ini menunjukkan tingginya likuiditas dan frekuensi aktivitas *trading* harian pada sektor-sektor konvensional tersebut meskipun fluktuasi harganya tidak se-agresif sektor teknologi.
 
-##### Real-Time Stream Patterns
+### Real-Time Stream Patterns
 Melalui simulasi aliran data (2024–2026) yang diproses menggunakan PySpark Structured Streaming, beberapa pola volatilitas langsung terdeteksi pada dashboard:
 * **Identifikasi Ticker Teraktif:** Sistem berhasil menyaring secara *real-time* saham-saham yang memiliki frekuensi kemunculan (*tick rate*) tertinggi per detik di dalam Kafka topic. Saham teknologi seperti AAPL tetap menjadi objek perdagangan paling aktif secara langsung.
 * **Deteksi Volatilitas Instan:** Dengan pembaruan visualisasi grafik Candlestick setiap 3 detik, anomali lonjakan harga (*price spikes*) atau penurunan mendadak (*flash crashes*) dapat langsung diamati secara spasial tanpa perlu menunggu proses rekonsiliasi data di akhir hari (EOD).
