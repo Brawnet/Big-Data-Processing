@@ -20,6 +20,25 @@
 
 Proyek ini memilih domain **Pasar Keuangan (Financial Market)**, dengan fokus khusus pada analisis pergerakan harga saham dan volume perdagangan harian di bursa saham Amerika Serikat (US Stock Market). Domain ini dipilih karena memiliki karakteristik high-velocity data (data dengan kecepatan tinggi) dan struktur temporal yang sangat kuat, menjadikannya studi kasus yang sangat relevan untuk menguji keandalan infrastruktur Big Data dalam menangani data historis sekaligus aliran data real-time.
 
+**Sistem yang Dibangun**
+
+Sistem yang dibangun adalah sebuah **Pipeline Data End-to-End hibrida (Lambda Architecture-inspired)**. Sistem ini mengintegrasikan beberapa teknologi Big Data utama untuk memisahkan beban kerja analisis:
+- **Ingestion Layer:** Menggunakan **Apache Kafka** (Zookeeper & Kafka Broker via Docker) sebagai message broker terdistribusi untuk menerima dan mengantrekan aliran data pasar saham.
+- **Processing Layer:** Menggunakan **Apache Spark (PySpark)** yang dibagi menjadi dua mesin pemrosesan terpisah: **PySpark Core** untuk kebutuhan Batch Processing (analisis data historis skala besar) dan **PySpark Structured** Streaming untuk kebutuhan Stream Processing (analisis data real-time dari Kafka).
+- **Presentation Layer:** Menggunakan Streamlit Dashboard interaktif yang didukung oleh pustaka Plotly untuk memvisualisasikan data gabungan dari hasil pemrosesan batch dan streaming secara dinamis.
+
+**Alur Kerja Sistem (End-to-End)**
+
+Secara end-to-end, sistem ini bekerja melalui mekanisme interaksi komponen berikut:
+**1. Simulasi & Ingesti Data (Producer):**
+Skrip Kafka Producer (`producer.py`) membaca dataset mentah secara sekuensial dan menyimulasikan aktivitas pasar saham live. Data saham untuk rentang tahun 2024–2026 dikirimkan secara kontinu dengan kecepatan tinggi (100 data/detik) ke dalam Kafka Topic bernama `stock_market`.
+Jalur Pemrosesan Batch (Batch Processing Pipeline):
+Secara berkala atau satu waktu, skrip batch_analysis.py mengeksekusi pemrosesan menggunakan Apache Spark untuk membaca data historis (tahun 2020–2023) langsung dari repositori data. Spark melakukan transformasi data, menyamakan tipe data temporal, dan melakukan agregasi berat (menghitung rata-rata harga penutupan dan total volume perdagangan harian yang dikelompokkan per sektor industri). Hasil agregasi batch ini disimpan ke dalam HDFS (Hadoop Distributed File System) dengan fallback otomatis ke berkas CSV lokal (`hasil_batch_saham.csv`) agar siap dikonsumsi dashboard.
+**2. Jalur Pemrosesan Streaming (Real-Time Pipeline):**
+Secara paralel, skrip `streaming_job.py` yang berbasis PySpark Structured Streaming terus memantau (subscribe) Kafka Topic `stock_market`. Setiap ada tick data baru yang masuk dari producer, Spark langsung menangkapnya secara real-time, memvalidasi struktur datanya sesuai skema Candlestick, dan menuliskan hasilnya ke dalam direktori output streaming dalam bentuk pecahan berkas JSON mikro (`../data/stream_output/*.json`).
+**3. Konsumsi & Visualisasi Dashboard (Streamlit):**
+Aplikasi dashboard Streamlit (`app.py`) bertindak sebagai muara akhir. Saat dijalankan, aplikasi ini membaca data batch historis untuk menampilkan tren makro sektor industri. Ketika fitur Auto-Refresh diaktifkan, Streamlit akan melakukan pemindaian berkala setiap 3 detik ke folder output streaming. Aplikasi ini secara cerdas menggabungkan (concatenate) data historis sebelum 2024 dengan data live baru yang masuk dari Spark, lalu merendernya ke dalam grafik Candlestick dinamis dan Line Chart Plotly secara real-time.
+
 ---
 
 ## Problem Statement
