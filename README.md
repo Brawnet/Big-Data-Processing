@@ -37,11 +37,11 @@ Skrip Kafka Producer (`producer.py`) membaca dataset mentah secara sekuensial da
 Jalur Pemrosesan Batch (Batch Processing Pipeline):
 Secara berkala atau satu waktu, skrip batch_analysis.py mengeksekusi pemrosesan menggunakan Apache Spark untuk membaca data historis (tahun 2020–2023) langsung dari repositori data. Spark melakukan transformasi data, menyamakan tipe data temporal, dan melakukan agregasi berat (menghitung rata-rata harga penutupan dan total volume perdagangan harian yang dikelompokkan per sektor industri). Hasil agregasi batch ini disimpan ke dalam HDFS (Hadoop Distributed File System) dengan fallback otomatis ke berkas CSV lokal (`hasil_batch_saham.csv`) agar siap dikonsumsi dashboard.
 
-### **2. Jalur Pemrosesan Streaming (Real-Time Pipeline):**
+##### **2. Jalur Pemrosesan Streaming (Real-Time Pipeline):**
 
 Secara paralel, skrip `streaming_job.py` yang berbasis PySpark Structured Streaming terus memantau (subscribe) Kafka Topic `stock_market`. Setiap ada tick data baru yang masuk dari producer, Spark langsung menangkapnya secara real-time, memvalidasi struktur datanya sesuai skema Candlestick, dan menuliskan hasilnya ke dalam direktori output streaming dalam bentuk pecahan berkas JSON mikro (`../data/stream_output/*.json`).
 
-### **3. Konsumsi & Visualisasi Dashboard (Streamlit):**
+##### **3. Konsumsi & Visualisasi Dashboard (Streamlit):**
 
 Aplikasi dashboard Streamlit (`app.py`) bertindak sebagai muara akhir. Saat dijalankan, aplikasi ini membaca data batch historis untuk menampilkan tren makro sektor industri. Ketika fitur Auto-Refresh diaktifkan, Streamlit akan melakukan pemindaian berkala setiap 3 detik ke folder output streaming. Aplikasi ini secara cerdas menggabungkan (concatenate) data historis sebelum 2024 dengan data live baru yang masuk dari Spark, lalu merendernya ke dalam grafik Candlestick dinamis dan Line Chart Plotly secara real-time.
 
