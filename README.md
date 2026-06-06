@@ -16,7 +16,9 @@
 
 ## Project Description
 
-Proyek ini merupakan implementasi **pipeline Big Data end-to-end** untuk memproses data harga saham harian menggunakan teknologi modern: **Apache Kafka**, **Apache Spark**, dan **Streamlit Dashboard**. Pipeline mencakup dua jalur pemrosesan utama — *batch processing* menggunakan PySpark dan *stream processing* berbasis Kafka secara real-time.
+**Domain Pilihan**
+
+Proyek ini memilih domain **Pasar Keuangan (Financial Market)**, dengan fokus khusus pada analisis pergerakan harga saham dan volume perdagangan harian di bursa saham Amerika Serikat (US Stock Market). Domain ini dipilih karena memiliki karakteristik high-velocity data (data dengan kecepatan tinggi) dan struktur temporal yang sangat kuat, menjadikannya studi kasus yang sangat relevan untuk menguji keandalan infrastruktur Big Data dalam menangani data historis sekaligus aliran data real-time.
 
 ---
 
