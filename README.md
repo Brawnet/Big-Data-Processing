@@ -277,6 +277,34 @@ Dashboard Streamlit (`app.py`) menyediakan visualisasi interaktif sebagai beriku
 
 ---
 
+## Findings & Conclusion
+
+##### Batch Analysis Findings
+Berdasarkan agregasi data historis (2020–2023) menggunakan PySpark Batch Job, ditemukan beberapa tren makro struktural pada pasar saham AS:
+* **Dominasi Sektor Teknologi:** Sektor *Technology* secara konsisten mencatatkan rata-rata harga penutupan (`Avg_Close_Price`) tertinggi dibandingkan sektor lainnya. Hal ini didorong oleh pertumbuhan masif emiten besar seperti Apple (AAPL) dan Microsoft (MSFT) pasca-pandemi.
+* **Volume Transaksi Industri Keuangan & Energi:** Meskipun sektor teknologi memimpin dari segi harga saham, volume perdagangan terbesar (`Total_Volume`) sering kali didominasi oleh sektor *Finance* (Keuangan) dan *Energy* (Energi). Ini menunjukkan tingginya likuiditas dan frekuensi aktivitas *trading* harian pada sektor-sektor konvensional tersebut meskipun fluktuasi harganya tidak se-agresif sektor teknologi.
+
+##### Real-Time Stream Patterns
+Melalui simulasi aliran data (2024–2026) yang diproses menggunakan PySpark Structured Streaming, beberapa pola volatilitas langsung terdeteksi pada dashboard:
+* **Identifikasi Ticker Teraktif:** Sistem berhasil menyaring secara *real-time* saham-saham yang memiliki frekuensi kemunculan (*tick rate*) tertinggi per detik di dalam Kafka topic. Saham teknologi seperti AAPL tetap menjadi objek perdagangan paling aktif secara langsung.
+* **Deteksi Volatilitas Instan:** Dengan pembaruan visualisasi grafik Candlestick setiap 3 detik, anomali lonjakan harga (*price spikes*) atau penurunan mendadak (*flash crashes*) dapat langsung diamati secara spasial tanpa perlu menunggu proses rekonsiliasi data di akhir hari (EOD).
+
+### Conclusion
+Implementasi arsitektur hibrida ini berhasil menjawab seluruh komponen pada *Problem Statement*. Pemisahan jalur data terbukti efektif; analisis tren makro jangka panjang berhasil dieksekusi dengan efisiensi tinggi melalui mesin *Batch* tanpa mengganggu performa *Stream processing* berlatensi rendah yang bertugas menangkap pergerakan harga per detik. Hasilnya, keputusan investasi dapat diambil secara lebih komprehensif—memadukan perspektif tren historis sektor dengan kondisi likuiditas pasar terkini.
+
+---
+
+## Known Limitations
+
+Meskipun pipeline Big Data ini berjalan dengan baik, terdapat beberapa batasan teknis (*corners cut*) di dalam sistem yang diidentifikasi untuk pengembangan lebih lanjut:
+
+* **Penyimpanan Lokal untuk Output Streaming:** Karena keterbatasan infrastruktur lokal saat pengujian, hasil *output* dari PySpark Structured Streaming ditulis ke dalam bentuk pecahan berkas JSON mikro di direktori lokal (`../data/stream_output`). Pada skala produksi, hal ini dapat memicu masalah *I/O bottlenecks* dan seharusnya dialirkan ke dalam *NoSQL Database* (seperti Apache Cassandra atau HBase) atau *Time-Series Database* (seperti InfluxDB).
+* **Skalabilitas Klaster Tunggal (Single-Node Broker):** Komponen Apache Kafka dan Zookeeper masih dijalankan dalam konfigurasi *Single-Node* (1 Broker, `replication-factor: 1`) di dalam lingkungan Docker Compose. Arsitektur ini rentan terhadap *Single Point of Failure* (SPOF) dan belum mencerminkan toleransi kesalahan (*fault-tolerance*) klaster terdistribusi yang sebenarnya.
+* **Ketergantungan Sinkronisasi File Streamlit:** Dashboard Streamlit membaca data streaming dengan memindai (*scanning*) folder berisi tumpukan file JSON secara berkala via fungsi `glob.glob`. Seiring berjalannya waktu, jumlah file JSON yang menumpuk dari Spark akan memperlambat performa pembacaan memori pada dashboard jika tidak dilakukan mekanisme *purging* (pembersihan berkas lama) secara berkala.
+
+
+---
+
 ## Lisensi
 
 Proyek ini dibuat untuk keperluan pembelajaran dan demonstrasi pipeline Big Data.
