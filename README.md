@@ -137,38 +137,6 @@ JALUR BATCH
                                               └───────────────────────────┘
 ```
 
-
-```
-┌─────────────────┐       ┌───────────────┐       ┌──────────────────┐
-│  CSV Dataset    │──────▶│ Kafka Producer│──────▶│  Apache Kafka    │
-│(stock_prices_   │       │  (producer.py)│       │  Topic:          │
-│  daily.csv)     │       └───────────────┘       │  stock_market    │
-└─────────────────┘                               └────────┬─────────┘
-        │                                                  │
-        │ (Batch)                                          │ (Streaming)
-        ▼                                                  ▼
-┌──────────────────┐                        ┌──────────────────────────┐
-│  PySpark Batch   │                        │ PySpark Structured       │
-│  Analysis        │                        │ Streaming Job            │
-│  (batch_         │                        │ (streaming_job.py)       │
-│   analysis.py)   │                        └────────────┬─────────────┘
-└────────┬─────────┘                                     │
-         │                                               │
-         ▼                                               ▼
-┌──────────────────┐                        ┌───────────────────────────┐
-│ hasil_batch_     │                        │ data/stream_output/       │
-│ saham.csv        │                        │ (JSON files, real-time)   │
-└────────┬─────────┘                        └──────────────┬────────────┘
-         │                                                 │
-         └─────────────────┬───────────────────────────────┘
-                           ▼
-                ┌──────────────────────┐
-                │  Streamlit Dashboard │
-                │     (app.py)         │
-                │  Port: 8501          │
-                └──────────────────────┘
-```
-
 ---
 
 ## Teknologi yang Digunakan
