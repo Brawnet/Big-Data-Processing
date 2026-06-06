@@ -6,19 +6,21 @@
 |---|---|
 | Brant Marvel Santosa | 0706022310005 |
 | M. Ilham Fadhilah Wirayudha | 0706022310062 |
-| M. Royhan Firdaus A | 0706022310057 |
+| Moch. Royhan Firdaus A | 0706022310057 |
 | Muh. Nur Alif Akbar | 0706022310031 |
 | Yehezkiel Chandra | 0706022310038 |
 
 
-## our project in yt https://youtu.be/qx72UBF5SpQ (play it 2x)
+## Project Demonstration https://youtu.be/qx72UBF5SpQ (play it 2x)
 ---
+
+## Project Description
 
 Proyek ini merupakan implementasi **pipeline Big Data end-to-end** untuk memproses data harga saham harian menggunakan teknologi modern: **Apache Kafka**, **Apache Spark**, dan **Streamlit Dashboard**. Pipeline mencakup dua jalur pemrosesan utama — *batch processing* menggunakan PySpark dan *stream processing* berbasis Kafka secara real-time.
 
 ---
 
-## ❓ Problem Statement
+## Problem Statement
 
 Pipeline ini dirancang untuk menjawab dua pertanyaan bisnis utama:
 
@@ -34,7 +36,7 @@ Pertanyaan ini dijawab oleh PySpark Structured Streaming (`streaming_job.py`) ya
 
 ---
 
-## 📁 Struktur Proyek
+## Struktur Proyek
 
 ```
 Big-Data-Processing-main/
@@ -59,7 +61,7 @@ Big-Data-Processing-main/
 
 ---
 
-## 🏗️ Arsitektur Sistem
+## Arsitektur Sistem
 
 ```
 ┌─────────────────┐       ┌───────────────┐       ┌──────────────────┐
@@ -94,7 +96,7 @@ Big-Data-Processing-main/
 
 ---
 
-## 🔧 Teknologi yang Digunakan
+## Teknologi yang Digunakan
 
 | Teknologi | Versi | Fungsi |
 |---|---|---|
@@ -108,7 +110,7 @@ Big-Data-Processing-main/
 
 ---
 
-## 📊 Dataset
+## Dataset
 
 **File:** `data/stock_prices_daily.csv`
 
@@ -130,7 +132,7 @@ Dataset berisi harga saham harian dari berbagai perusahaan yang terdaftar di bur
 
 ---
 
-## ⚙️ Cara Menjalankan
+## Cara Menjalankan
 
 ### Prasyarat
 
@@ -200,19 +202,19 @@ Dashboard dapat diakses di: **http://localhost:8501**
 
 ---
 
-## 📈 Fitur Dashboard
+## Fitur Dashboard
 
 Dashboard Streamlit (`app.py`) menyediakan visualisasi interaktif sebagai berikut:
 
-- **🚀 Top 10 Gainers** — Saham dengan kenaikan harga terbesar dalam rentang waktu yang dipilih (maksimal 1 bulan)
-- **📊 Batch Analysis** — Visualisasi hasil batch PySpark: rata-rata harga penutupan dan total volume per sektor
-- **⚡ Real-Time Streaming** — Tampilan data saham yang masuk secara real-time dari Kafka (auto-refresh setiap 3 detik)
-- **🕯️ Candlestick Chart** — Grafik candlestick interaktif untuk analisis teknikal saham individual
-- **🔄 Auto-Refresh Toggle** — Aktifkan/nonaktifkan pembaruan data otomatis dari sidebar
+- ** Top 10 Gainers** — Saham dengan kenaikan harga terbesar dalam rentang waktu yang dipilih (maksimal 1 bulan)
+- ** Batch Analysis** — Visualisasi hasil batch PySpark: rata-rata harga penutupan dan total volume per sektor
+- ** Real-Time Streaming** — Tampilan data saham yang masuk secara real-time dari Kafka (auto-refresh setiap 3 detik)
+- ** Candlestick Chart** — Grafik candlestick interaktif untuk analisis teknikal saham individual
+- ** Auto-Refresh Toggle** — Aktifkan/nonaktifkan pembaruan data otomatis dari sidebar
 
 ---
 
-## 📦 Konfigurasi Kafka (docker-compose.yml)
+## Konfigurasi Kafka (docker-compose.yml)
 
 | Parameter | Nilai |
 |---|---|
@@ -224,7 +226,7 @@ Dashboard Streamlit (`app.py`) menyediakan visualisasi interaktif sebagai beriku
 
 ---
 
-## 📝 Catatan
+## Catatan
 
 - **Windows users:** `streaming_job.py` menyertakan patch otomatis untuk mengunduh `winutils.exe` dan `hadoop.dll` yang diperlukan Hadoop di lingkungan Windows.
 - Pastikan Kafka sudah berjalan sebelum menjalankan Producer maupun Streaming Job.
