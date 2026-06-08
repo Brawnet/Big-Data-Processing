@@ -18,7 +18,9 @@
 
 **Domain Pilihan**
 
-Proyek ini memilih domain **Pasar Keuangan (Financial Market)**, dengan fokus khusus pada analisis pergerakan harga saham dan volume perdagangan harian di bursa saham Amerika Serikat (US Stock Market). Domain ini dipilih karena memiliki karakteristik high-velocity data (data dengan kecepatan tinggi) dan struktur temporal yang sangat kuat, menjadikannya studi kasus yang sangat relevan untuk menguji keandalan infrastruktur Big Data dalam menangani data historis sekaligus aliran data real-time.
+Proyek ini memilih domain **Pasar Keuangan (*Financial Market*)**, dengan fokus khusus pada analisis pergerakan harga saham dan volume perdagangan harian di bursa saham Amerika Serikat (*US Stock Market*). Domain ini dipilih karena memiliki karakteristik *high-velocity data* (data dengan kecepatan tinggi), volume data yang besar, serta struktur temporal yang kuat, menjadikannya studi kasus yang sangat relevan untuk menguji keandalan infrastruktur *Big Data* dalam menangani data historis sekaligus aliran data *real-time*.
+
+Selain itu, pasar saham merupakan salah satu lingkungan yang paling bergantung pada data, di mana keputusan bisnis dan investasi sering kali harus diambil berdasarkan informasi yang terus berubah dalam waktu singkat. Oleh karena itu, kemampuan untuk mengolah data historis dalam skala besar serta memproses data yang masuk secara kontinu menjadi aspek yang sangat penting. Melalui proyek ini, berbagai teknologi *Big Data* seperti Apache Kafka, Apache Spark, dan Streamlit diintegrasikan untuk mensimulasikan bagaimana organisasi keuangan modern membangun sistem analitik yang mampu mendukung pemantauan pasar, identifikasi tren, dan pengambilan keputusan berbasis data secara lebih cepat dan efisien.
 
 **Sistem yang Dibangun**
 
@@ -283,14 +285,25 @@ Dashboard Streamlit (`app.py`) menyediakan visualisasi interaktif sebagai beriku
 Berdasarkan agregasi data historis (2020–2023) menggunakan PySpark Batch Job, ditemukan beberapa tren makro struktural pada pasar saham AS:
 * **Dominasi Sektor Teknologi:** Sektor *Technology* secara konsisten mencatatkan rata-rata harga penutupan (`Avg_Close_Price`) tertinggi dibandingkan sektor lainnya. Hal ini didorong oleh pertumbuhan masif emiten besar seperti Apple (AAPL) dan Microsoft (MSFT) pasca-pandemi.
 * **Volume Transaksi Industri Keuangan & Energi:** Meskipun sektor teknologi memimpin dari segi harga saham, volume perdagangan terbesar (`Total_Volume`) sering kali didominasi oleh sektor *Finance* (Keuangan) dan *Energy* (Energi). Ini menunjukkan tingginya likuiditas dan frekuensi aktivitas *trading* harian pada sektor-sektor konvensional tersebut meskipun fluktuasi harganya tidak se-agresif sektor teknologi.
+* **Perbedaan Harga dan Likuiditas Antar Sektor:** Hasil analisis menunjukkan bahwa sektor dengan harga saham rata-rata tinggi tidak selalu memiliki volume transaksi terbesar. Temuan ini mengindikasikan bahwa valuasi perusahaan dan tingkat aktivitas perdagangan merupakan dua metrik yang berbeda dan perlu dianalisis secara terpisah.
+* **Efektivitas Agregasi Data Historis:** Pemrosesan menggunakan Apache Spark berhasil mengubah jutaan data transaksi harian menjadi ringkasan sektor yang lebih mudah dianalisis. Proses agregasi ini memungkinkan identifikasi tren pasar jangka panjang yang sulit diamati dari data mentah.
+* **Pola Historis yang Konsisten:** Hasil agregasi menunjukkan bahwa karakteristik utama tiap sektor cenderung tetap konsisten selama periode observasi, sehingga analisis historis dapat digunakan sebagai dasar untuk memahami perilaku pasar pada tingkat makro.
 
 ### Real-Time Stream Patterns
 Melalui simulasi aliran data (2024–2026) yang diproses menggunakan PySpark Structured Streaming, beberapa pola volatilitas langsung terdeteksi pada dashboard:
 * **Identifikasi Ticker Teraktif:** Sistem berhasil menyaring secara *real-time* saham-saham yang memiliki frekuensi kemunculan (*tick rate*) tertinggi per detik di dalam Kafka topic. Saham teknologi seperti AAPL tetap menjadi objek perdagangan paling aktif secara langsung.
 * **Deteksi Volatilitas Instan:** Dengan pembaruan visualisasi grafik Candlestick setiap 3 detik, anomali lonjakan harga (*price spikes*) atau penurunan mendadak (*flash crashes*) dapat langsung diamati secara spasial tanpa perlu menunggu proses rekonsiliasi data di akhir hari (EOD).
+* **Aliran Data Berkelanjutan:** Integrasi antara Kafka dan Spark *Structured Streaming* memungkinkan data pasar mengalir secara kontinu tanpa intervensi manual. Setiap data baru yang diterima oleh Kafka dapat segera diproses dan divisualisasikan pada dashboard.
+* **Latensi Pemrosesan yang Rendah:** Pemisahan jalur *stream processing* dari jalur *batch processing* memungkinkan data terbaru ditampilkan hampir secara langsung setelah diterima dari Kafka, mendukung kebutuhan monitoring pasar yang sensitif terhadap waktu.
 
 ### Conclusion
-Implementasi arsitektur hibrida ini berhasil menjawab seluruh komponen pada *Problem Statement*. Pemisahan jalur data terbukti efektif; analisis tren makro jangka panjang berhasil dieksekusi dengan efisiensi tinggi melalui mesin *Batch* tanpa mengganggu performa *Stream processing* berlatensi rendah yang bertugas menangkap pergerakan harga per detik. Hasilnya, keputusan investasi dapat diambil secara lebih komprehensif—memadukan perspektif tren historis sektor dengan kondisi likuiditas pasar terkini.
+Implementasi arsitektur hibrida yang menggabungkan *batch processing* dan *stream processing* berhasil memenuhi seluruh tujuan proyek yang telah ditetapkan. Melalui Apache Spark *Batch Processing*, sistem mampu menghasilkan *insight* historis dari data pasar saham periode 2020–2023, sementara Apache Kafka dan Spark *Structured Streaming* memungkinkan pemrosesan serta visualisasi data saham secara *real-time* dengan latensi rendah.
+
+Integrasi berbagai teknologi *Big Data* seperti Apache Kafka, Apache Spark, Docker Compose, dan Streamlit berhasil membentuk sebuah *end-to-end data pipeline* yang mampu menangani proses *ingestion*, *processing*, *storage*, dan *visualization* secara terpadu. Dashboard yang dibangun juga berhasil menyajikan hasil analisis historis dan data streaming dalam satu antarmuka yang interaktif dan mudah dipahami.
+
+Selain membuktikan implementasi konsep *Big Data* seperti *Volume*, *Velocity*, dan *Value*, proyek ini menunjukkan bagaimana kombinasi *batch analytics* dan *real-time analytics* dapat memberikan pemahaman yang lebih komprehensif terhadap kondisi pasar dibandingkan penggunaan salah satu pendekatan secara terpisah.
+
+Secara keseluruhan, proyek ini berhasil mendemonstrasikan pembangunan *Big Data pipeline* modern yang mampu mengolah data historis dan data streaming secara efektif, serta memberikan fondasi yang kuat untuk pengembangan sistem analitik pasar keuangan yang lebih skalabel di masa mendatang.
 
 ---
 
